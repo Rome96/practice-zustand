@@ -6,8 +6,14 @@ import {
   IoPawOutline,
 } from "react-icons/io5";
 import { WhiteCard } from "../../components";
+import { useBearStore } from "../../stores/bears/bears.store";
+import { useShallow } from "zustand/shallow";
 
 export const Dashboard = () => {
+  const totalBears = useBearStore(
+    useShallow((state) => state.computed.totalBears),
+  );
+
   return (
     <>
       <h1>Dashboard</h1>
@@ -18,7 +24,7 @@ export const Dashboard = () => {
         <WhiteCard centered>
           <IoPawOutline size={50} className="text-indigo-600" />
           <h2>Osos</h2>
-          <p>20</p>
+          <p>{totalBears}</p>
         </WhiteCard>
 
         <WhiteCard centered>

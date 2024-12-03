@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import { create } from "zustand";
 
 interface Bear {
   id: number;
@@ -11,6 +11,10 @@ interface BearStore {
   pandasBears: number;
 
   bears: Bear[];
+
+  computed: {
+    totalBears: number;
+  };
 
   increaseBlackBears: (by: number) => void;
   decreaseBlackBears: (by: number) => void;
@@ -26,27 +30,46 @@ interface BearStore {
   clearBears: () => void;
 }
 
-const initialState = {
+export const useBearStore = create<BearStore>()((set, get) => ({
   blackBears: 10,
   polarBears: 20,
-  pandasBears: 30,
-  bears: [{id: 1, name: 'Oso #1'}],
-}
+  pandasBears: 3,
+  bears: [{ id: 1, name: "Oso #1" }],
 
-export const useBearStore = create<BearStore>()((set) => ({
-  ...initialState,
-  increaseBlackBears: (by: number) => set((state) => ({ blackBears: state.blackBears + by })),
-  decreaseBlackBears: (by: number) => set((state) => ({ blackBears: state.blackBears - by })),
+  //getter - property computed
+  computed: {
+    get totalBears() {
+      return (
+        get().blackBears +
+        get().pandasBears +
+        get().polarBears +
+        get().bears.length
+      );
+    },
+  },
 
-  increasePolarBears: (by: number) => set((state) => ({ polarBears: state.polarBears + by })),
-  decreasePolarBears: (by: number) => set((state) => ({ polarBears: state.polarBears - by })),
+  increaseBlackBears: (by: number) =>
+    set((state) => ({ blackBears: state.blackBears + by })),
+  decreaseBlackBears: (by: number) =>
+    set((state) => ({ blackBears: state.blackBears - by })),
 
-  increasePandasBears: (by: number) => set((state) => ({ pandasBears: state.pandasBears + by })),
-  decreasePandasBears: (by: number) => set((state) => ({ pandasBears: state.pandasBears - by })),
+  increasePolarBears: (by: number) =>
+    set((state) => ({ polarBears: state.polarBears + by })),
+  decreasePolarBears: (by: number) =>
+    set((state) => ({ polarBears: state.polarBears - by })),
+
+  increasePandasBears: (by: number) =>
+    set((state) => ({ pandasBears: state.pandasBears + by })),
+  decreasePandasBears: (by: number) =>
+    set((state) => ({ pandasBears: state.pandasBears - by })),
 
   doNothing: () => set((state) => ({ bears: [...state.bears] })),
-  addBear: () => set((state) => ({
-    bears: [...state.bears, {id: state.bears.length + 1, name: `Oso #${state.bears.length + 1}`}]
-  })),
-  clearBears: () => set(({ bears: [] })),
-}))
+  addBear: () =>
+    set((state) => ({
+      bears: [
+        ...state.bears,
+        { id: state.bears.length + 1, name: `Oso #${state.bears.length + 1}` },
+      ],
+    })),
+  clearBears: () => set({ bears: [] }),
+}));
