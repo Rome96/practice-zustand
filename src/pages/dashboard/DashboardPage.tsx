@@ -8,11 +8,14 @@ import {
 import { WhiteCard } from "../../components";
 import { useBearStore } from "../../stores/bears/bears.store";
 import { useShallow } from "zustand/shallow";
+import { usePersonStore } from "../../stores";
 
 export const Dashboard = () => {
   const totalBears = useBearStore(
     useShallow((state) => state.computed.totalBears),
   );
+
+  const firstName = usePersonStore((state) => state.firstName);
 
   return (
     <>
@@ -30,7 +33,7 @@ export const Dashboard = () => {
         <WhiteCard centered>
           <IoAccessibilityOutline size={50} className="text-indigo-600" />
           <h2>Persona</h2>
-          <p>Información</p>
+          <p>{firstName}</p>
         </WhiteCard>
 
         <WhiteCard centered>
